@@ -1,12 +1,12 @@
-import { headerRoutes } from "$lib/utils/header-routes";
-import { IHeaderRoutes } from "$lib/utils/types";
+import { headerRoutes } from "$lib/header-routes";
+import { IHeaderRoutes } from "$lib/types";
 import Image from "next/image";
 import Link from "next/link";
 
 export const Navbar = () => {
   return (
-    <header className="bg-white z-[999] sticky top-0 h-[6rem] w-full flex items-center justify-center shadow-sm shadow-gray-400">
-      <div className="w-full flex justify-between items-center px-8 py-[1.6rem] lg:px-10 lg:py-8">
+    <header className="sticky top-0 z-[999] flex h-24 w-full items-center justify-center bg-white shadow-sm shadow-gray-400">
+      <div className="flex w-full items-center justify-between px-8 py-[1.6rem] lg:px-10 lg:py-8">
         <Link href="/">
           <Image
             src="/microphone.gif"
@@ -23,7 +23,7 @@ export const Navbar = () => {
               {route.routeName}
             </Link>
           ))}
-          <button className="font-bold border-2 border-white rounded-md bg-blue-500 text-white px-4 py-2 cursor-pointer transition-all ease-in-out duration-300 hover:border-blue-500 hover:text-black hover:bg-transparent">
+          <button className="cursor-pointer rounded-md border-2 border-white bg-blue-500 px-4 py-2 font-bold text-white transition-all duration-300 ease-in-out hover:border-blue-500 hover:bg-transparent hover:text-black">
             Login
           </button>
         </div>

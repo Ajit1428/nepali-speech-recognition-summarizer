@@ -1,3 +1,5 @@
+import { type LucideIcon } from "lucide-react";
+
 export interface IHeaderRoutes {
   routeName: string;
   href: string;
@@ -8,4 +10,9 @@ export interface ITestomonials {
   userName: string;
   companyAndPosition: string;
   testomonialText: string;
+}
+
+export interface IFooterSocial {
+  socialIcon: LucideIcon;
+  socialLink: string;
 }

@@ -1,13 +1,13 @@
-import { testomonialList } from "$lib/utils/testimonials";
-import { ITestomonials } from "$lib/utils/types";
+import { testomonialList } from "$lib/testimonials";
+import { ITestomonials } from "$lib/types";
 import Image from "next/image";
 
 export const Testomonials = () => {
   return (
-    <main className="h-full flex flex-col justify-center items-center overflow-y-auto overflow-x-hidden px-8 py-12 gap-[5rem] lg:py-10 lg:px-[5rem] lg:overflow-hidden xl:px-[10rem] 2xl:px-[8rem]">
-      <h1 className="font-bold text-[2rem] 2xl:text-[2.5rem]">Testomonials</h1>
+    <main className="flex h-full flex-col items-center justify-center gap-20 overflow-y-auto overflow-x-hidden px-8 py-12 lg:overflow-hidden lg:px-20 lg:py-10 xl:px-40 2xl:px-32">
+      <h1 className="text-[2rem] font-bold 2xl:text-[2.5rem]">Testomonials</h1>
       <div className="w-[22rem] md:w-[47rem] lg:w-[55rem] xl:w-[79rem] 2xl:w-[95rem]">
-        <div className="grid gap-20 md:gap-8 md:grid-cols-2 lg:gap-12 xl:grid-cols-3 2xl:gap-14">
+        <div className="grid gap-20 md:grid-cols-2 md:gap-8 lg:gap-12 xl:grid-cols-3 2xl:gap-14">
           {testomonialList.map((testomonial: ITestomonials, index: number) => (
             <div
               key={index}
@@ -18,7 +18,7 @@ export const Testomonials = () => {
                 alt="testomonial-quote"
                 width="40"
                 height="40"
-                className="absolute left-5 -top-1"
+                className="absolute -top-1 left-5"
               />
               <Image
                 src={testomonial.icon}
