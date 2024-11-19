@@ -14,9 +14,12 @@ export const LandingPage = () => {
           transcription followed by a brief, easy-to-understand summary of the
           content.
         </p>
-        <button className="rounded-lg border-2 border-blue-500 bg-transparent px-4 py-2 text-sm font-bold text-blue-500 transition-all duration-300 ease-in-out hover:bg-blue-500 hover:text-white xl:text-[1.1rem]">
+        <a
+          href="/summarize"
+          className="cursor-pointer rounded-lg border-2 border-blue-500 bg-transparent px-4 py-2 text-sm font-bold text-blue-500 transition-all duration-300 ease-in-out hover:bg-blue-500 hover:text-white xl:text-[1.1rem]"
+        >
           Get Started
-        </button>
+        </a>
       </div>
       <div className="w-full max-w-[600px]">
         <Image

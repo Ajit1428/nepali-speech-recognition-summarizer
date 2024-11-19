@@ -3,10 +3,10 @@ import { IHeaderRoutes } from "./types";
 export const headerRoutes: IHeaderRoutes[] = [
   {
     routeName: "Home",
-    href: "/home",
+    href: "/",
   },
   {
-    routeName: "Voices",
-    href: "/voices",
+    routeName: "Summarize",
+    href: "/summarize",
   },
 ];
