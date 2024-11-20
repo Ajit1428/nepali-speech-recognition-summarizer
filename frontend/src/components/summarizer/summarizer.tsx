@@ -51,16 +51,16 @@ export default function SummarizerComponent() {
         ) : responseData ? (
           <div className="flex flex-col items-start justify-start gap-10">
             <div className="flex flex-col gap-2">
-              <h2 className="w-fit border-b-4 border-double border-black text-xl font-bold">
+              <h1 className="w-fit border-b-4 border-double border-black text-xl font-bold">
                 Transcript{" "}
-              </h2>
-              <span className="text-lg">{responseData?.transcript}</span>
+              </h1>
+              <span className="text-xl">{responseData?.transcript}</span>
             </div>
             <div className="flex flex-col gap-2">
-              <h2 className="w-fit border-b-4 border-double border-black text-xl font-bold">
+              <h1 className="w-fit border-b-4 border-double border-black text-xl font-bold">
                 Summary
-              </h2>
-              <span className="text-lg">{responseData?.summary}</span>
+              </h1>
+              <span className="text-xl">{responseData?.summary}</span>
             </div>
           </div>
         ) : (

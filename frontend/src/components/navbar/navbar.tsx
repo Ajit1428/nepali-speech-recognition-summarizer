@@ -36,9 +36,9 @@ export const Navbar = () => {
               {route.routeName}
             </Link>
           ))}
-          <button className="cursor-pointer rounded-md border-2 border-white bg-blue-500 px-4 py-2 font-bold text-white transition-all duration-300 ease-in-out hover:border-blue-500 hover:bg-transparent hover:text-black ">
-            Login
-          </button>
+          {/* <button className="cursor-pointer rounded-md border-2 border-white bg-blue-500 px-4 py-2 font-bold text-white transition-all duration-300 ease-in-out hover:border-blue-500 hover:bg-transparent hover:text-black "> */}
+          {/*   Login */}
+          {/* </button> */}
         </div>
       </div>
     </header>
