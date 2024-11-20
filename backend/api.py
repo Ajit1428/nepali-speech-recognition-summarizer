@@ -25,9 +25,14 @@ import gc
 
 ##############################3
 
+# origins = [
+#     "*",
+
+# ]
 origins = [
-    "*",
+    "*",  # Change this to the Streamlit app's URL
 ]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -46,15 +51,15 @@ class text(BaseModel):
 @app.get("/input-audio")
 async def summary():
     try:
-        hf_model = load_huggingface_model("anish-shilpakar/wav2vec2-nepali")
-        # l_model, l_processor =  load_local_model("./model", "./processor")
+        # hf_model = load_huggingface_model("Biplop/wav2vec2-nep")
+        l_model, l_processor = load_local_model("./model", "./processor")
         t1 = time.time()
         # no need to save transcript in file
         # generateTranscriptForFileUsingHF('./input/anushasan.m4a',hf_model)
         transcript_op = generateTranscriptForFileUsingHF(
-            "./input/pustakalaya.m4a", hf_model
+            "./input/upanyas.mp3", hf_model
         )
-        print("transcript_op", transcript_op)
+        print(transcript_op)
         t2 = time.time()
         print(f"Time for huggingface model: {t2-t1} seconds")
         # with open(f"./transcripts/anushasan.txt",'r',encoding="utf-8") as f:
@@ -64,8 +69,8 @@ async def summary():
         t2 = time.time()
         # return summary
         return {
+            "transcripts": transcript_op,
             "summary": summary,
-            "transcript_op": transcript_op,
             "time": round(t2 - t1, 4),
         }
     except Exception as e:
@@ -73,7 +78,7 @@ async def summary():
         return "fail"
 
 
-# ## load the model and processor
+## load the model and processor
 # @app.post("/loadmodel")
 # async def loadthemodels():
 #     load_model.loadModelInitial()
@@ -103,7 +108,7 @@ async def summary():
 #         return "fail"
 
 
-# # ###########for abstractive text summarizer for file ##########
+# # # ###########for abstractive text summarizer for file ##########
 # @app.get("/abstract-file")
 # async def create_upload_file(text: UploadFile = File(...)):
 #     try:
@@ -119,3 +124,50 @@ async def summary():
 #         return {"summary":summary,"time":round(t2-t1,4)}
 #     except:
 #         return {"summary":"couldnot handle request, Try again!", "time":0}
+
+
+@app.post("/audio")
+def create_upload_file(audio: UploadFile = File(...)):
+    try:
+        hf_model = load_huggingface_model("Biplop/wav2vec2-nep")
+        ext = audio.filename.split(".").pop()
+        os.makedirs("static/audio", exist_ok=True)
+        file_location = f"static/audio/{uuid.uuid1()}{audio.filename}"
+        with open(file_location, "wb+") as file_object:
+            file_object.write(audio.file.read())
+        if ext == "wav" or ext == "flac":
+            transcript = generateTranscriptForFileUsingHF(file_location, hf_model)
+            summary = get_summary_from_text(transcript)
+            os.remove(file_location)
+        else:
+            dest_path = f"static/audio/{uuid.uuid1()}coverted.flac"
+            command = f"ffmpeg -i {file_location} {dest_path}"
+            subprocess.call(command, shell=True)
+            transcript = generateTranscriptForFileUsingHF(dest_path, hf_model)
+            summary = get_summary_from_text(transcript)
+            os.remove(dest_path)
+            os.remove(file_location)
+        return JSONResponse(content={"transcript": transcript, "summary": summary})
+    except:
+        print(f"Error: {e}")
+        return JSONResponse(
+            content={"error": "Failed to process audio file"}, status_code=500
+        )
+
+
+# # ###########for abstractive text summarizer for file ##########
+@app.get("/abstract-file")
+async def create_upload_file(text: UploadFile = File(...)):
+    try:
+        print("hello")
+        t1 = time.time()
+        file_location = f"static/text/{uuid.uuid1()}{text.filename}"
+        with open(file_location, "wb+") as file_object:
+            file_object.write(text.file.read())
+        summary = get_summary_from_text(file_location)
+        # print(summary)
+        os.remove(file_location)
+        t2 = time.time()
+        return {"summary": summary, "time": round(t2 - t1, 4)}
+    except:
+        return {"summary": "couldnot handle request, Try again!", "time": 0}
