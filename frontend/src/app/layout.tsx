@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "../components/navbar/navbar";
+import { Toaster } from "react-hot-toast";
 
 const poppins = Poppins({
   weight: "400",
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
+        <Toaster position="top-center" />
         <Navbar />
         {children}
       </body>

@@ -1,30 +1,39 @@
 "use client";
-import React, { ChangeEvent, useState } from "react";
-import Image from "next/image";
+
+import React, { ChangeEvent, MouseEvent, useState } from "react";
 import axios from "axios";
 import { cn } from "@/lib/utils/cn";
+import AudioFileUpload from "./audio-file-uploader";
+import { AudioFileRecord } from "./audio-file-record";
 
 export default function SummarizerComponent() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [toggleRecorder, setToggleRecorder] = useState<boolean>(false);
   const [responseData, setResponseData] = useState<{
     transcript: string;
     summary: string;
   }>();
 
-  const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+  const handleUploadFileCallback = async (
+    event: ChangeEvent<HTMLInputElement> | MouseEvent<HTMLButtonElement>,
+    convertedFile: File | undefined,
+  ) => {
     setIsLoading(true);
-    const file = event?.target?.files[0];
+    const target = event?.target as HTMLInputElement;
+    const file = target?.files && target.files[0];
+    const formData: FormData = new FormData();
     if (file) {
-      const formData = new FormData();
       formData.append("audio", file);
-      const response = await axios.post(
-        `${process.env.BACKEND_URI}/audio`,
-        formData,
-      );
-      if (response) {
-        setResponseData(response.data);
-        setIsLoading(false);
-      }
+    } else {
+      formData.append("audio", convertedFile as Blob);
+    }
+    const response = await axios.post(
+      `${process.env.BACKEND_URI}/audio`,
+      formData,
+    );
+    if (response) {
+      setResponseData(response.data);
+      setIsLoading(false);
     }
   };
 
@@ -73,20 +82,33 @@ export default function SummarizerComponent() {
               </span>
             </div>
           </div>
+        ) : toggleRecorder ? (
+          <AudioFileRecord
+            handleRecordedFile={(res, url) => {
+              handleUploadFileCallback(res, url);
+            }}
+          />
         ) : (
-          <>
-            <div className="size-[60px]">
-              <Image alt="audio" src="/audio.png" width="100" height="100" />
-            </div>
-            <label className="cursor-pointer rounded-sm border-2 bg-blue-500 px-[32px] py-[10px] text-xs font-semibold capitalize text-white transition-all duration-300 ease-in-out hover:border-blue-500 hover:bg-transparent hover:text-blue-500 xl:text-[.9rem]">
-              Choose an audio file
-              <input
-                type="file"
-                hidden
-                onChange={(event) => handleFileUpload(event)}
-              />
-            </label>
-          </>
+          <AudioFileUpload
+            handleFileUpload={(res: ChangeEvent<HTMLInputElement>) => {
+              handleUploadFileCallback(res, undefined);
+            }}
+          />
+        )}
+        {!responseData && (
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-sm">OR</span>
+            <button
+              onClick={() => {
+                setToggleRecorder((value) => !value);
+              }}
+              className="text-[0.9rem] font-semibold text-blue-600 hover:cursor-pointer"
+            >
+              {toggleRecorder
+                ? "Click here to upload an audio file"
+                : "Click here to record an audio"}
+            </button>
+          </div>
         )}
       </div>
     </div>
